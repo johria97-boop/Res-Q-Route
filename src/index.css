@@ -1,0 +1,378 @@
+@import "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 25% 97%;
+    --foreground: 220 25% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 10%;
+
+    --primary: 210 80% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 20% 92%;
+    --secondary-foreground: 220 25% 10%;
+
+    --muted: 220 15% 94%;
+    --muted-foreground: 220 10% 45%;
+
+    --accent: 174 70% 42%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 85% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --emergency: 0 85% 55%;
+    --emergency-foreground: 0 0% 100%;
+
+    --clinical: 210 80% 50%;
+    --clinical-foreground: 0 0% 100%;
+
+    --success: 142 70% 42%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
+    --ring: 210 80% 50%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 220 25% 97%;
+    --sidebar-foreground: 220 25% 10%;
+    --sidebar-primary: 210 80% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 15% 94%;
+    --sidebar-accent-foreground: 220 25% 10%;
+    --sidebar-border: 220 15% 88%;
+    --sidebar-ring: 210 80% 50%;
+  }
+
+  .dark {
+    --background: 222 30% 6%;
+    --foreground: 210 20% 95%;
+
+    --card: 222 25% 10%;
+    --card-foreground: 210 20% 95%;
+
+    --popover: 222 25% 10%;
+    --popover-foreground: 210 20% 95%;
+
+    --primary: 210 80% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 222 20% 16%;
+    --secondary-foreground: 210 20% 95%;
+
+    --muted: 222 20% 14%;
+    --muted-foreground: 220 10% 55%;
+
+    --accent: 174 70% 42%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 85% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --emergency: 0 85% 55%;
+    --emergency-foreground: 0 0% 100%;
+
+    --clinical: 210 80% 55%;
+    --clinical-foreground: 0 0% 100%;
+
+    --success: 142 70% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --border: 222 20% 18%;
+    --input: 222 20% 18%;
+    --ring: 210 80% 55%;
+
+    --sidebar-background: 222 25% 8%;
+    --sidebar-foreground: 210 20% 95%;
+    --sidebar-primary: 210 80% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 20% 14%;
+    --sidebar-accent-foreground: 210 20% 95%;
+    --sidebar-border: 222 20% 18%;
+    --sidebar-ring: 210 80% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-card/80 backdrop-blur-xl border border-border/50 rounded-xl shadow-lg;
+  }
+  .glass-card-strong {
+    @apply bg-card/90 backdrop-blur-2xl border border-border/60 rounded-xl shadow-xl;
+  }
+  .glow-emergency {
+    box-shadow: 0 0 20px hsl(var(--emergency) / 0.3), 0 0 60px hsl(var(--emergency) / 0.1);
+  }
+  .glow-clinical {
+    box-shadow: 0 0 20px hsl(var(--clinical) / 0.3), 0 0 60px hsl(var(--clinical) / 0.1);
+  }
+  .glow-success {
+    box-shadow: 0 0 20px hsl(var(--success) / 0.3), 0 0 60px hsl(var(--success) / 0.1);
+  }
+  .gradient-emergency {
+    background: linear-gradient(135deg, hsl(var(--emergency)), hsl(var(--emergency) / 0.7));
+  }
+  .gradient-clinical {
+    background: linear-gradient(135deg, hsl(var(--clinical)), hsl(210 90% 40%));
+  }
+  .gradient-hero {
+    background: linear-gradient(135deg, hsl(222 30% 6%), hsl(222 25% 12%), hsl(210 40% 15%));
+  }
+  .pulse-emergency {
+    animation: pulseEmergency 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  .status-badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase;
+  }
+}
+
+@keyframes pulseEmergency {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--emergency) / 0.4); }
+  50% { box-shadow: 0 0 0 12px hsl(var(--emergency) / 0); }
+}
+
+.leaflet-container {
+  border-radius: var(--radius);
+  z-index: 1;
+}
+
+.map-loading {
+  height: 400px;
+}
+
+.map-container-shell {
+  height: 100%;
+  min-height: 400px;
+  width: 100%;
+  border-radius: 0.75rem;
+}
+
+.map-panel-md {
+  height: 400px;
+}
+
+.map-panel-lg {
+  height: 500px;
+}
+
+.popup-card {
+  min-width: 140px;
+}
+
+.popup-card-sm {
+  min-width: 120px;
+}
+
+.popup-selected {
+  color: hsl(var(--clinical));
+  font-weight: 700;
+}
+
+.role-card:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.role-card:nth-child(2) {
+  animation-delay: 150ms;
+}
+
+.role-card:nth-child(3) {
+  animation-delay: 300ms;
+}
+
+.admin-kpi-card:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.admin-kpi-card:nth-child(2) {
+  animation-delay: 100ms;
+}
+
+.admin-kpi-card:nth-child(3) {
+  animation-delay: 200ms;
+}
+
+.admin-kpi-card:nth-child(4) {
+  animation-delay: 300ms;
+}
+
+.flow-step-card {
+  @apply rounded-xl border border-border/60 bg-card/80 px-3 py-4 text-left flex items-center gap-3;
+  animation: flowStepEnter 500ms ease forwards;
+  opacity: 0;
+}
+
+.flow-step-index {
+  @apply inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold;
+  background: linear-gradient(135deg, hsl(var(--clinical)), hsl(var(--success)));
+  color: hsl(var(--primary-foreground));
+}
+
+.flow-step-card:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.flow-step-card:nth-child(2) {
+  animation-delay: 180ms;
+}
+
+.flow-step-card:nth-child(3) {
+  animation-delay: 360ms;
+}
+
+.flow-step-card:nth-child(4) {
+  animation-delay: 540ms;
+}
+
+@keyframes flowStepEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rescue-video-shell {
+  position: relative;
+  height: 170px;
+  border: 1px solid hsl(var(--border) / 0.7);
+  border-radius: 0.9rem;
+  background: linear-gradient(180deg, hsl(var(--card) / 0.95), hsl(var(--muted) / 0.5));
+  overflow: hidden;
+}
+
+.rescue-stage-track {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 54%;
+  height: 8px;
+  border-radius: 999px;
+  background: repeating-linear-gradient(
+    90deg,
+    hsl(var(--foreground) / 0.12),
+    hsl(var(--foreground) / 0.12) 14px,
+    transparent 14px,
+    transparent 24px
+  );
+}
+
+.rescue-stage-point {
+  position: absolute;
+  top: 28%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.rescue-stage-base {
+  left: 8%;
+}
+
+.rescue-stage-user {
+  left: 47%;
+  transform: translateX(-50%);
+}
+
+.rescue-stage-hospital {
+  right: 8%;
+}
+
+.rescue-stage-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 2px solid hsl(var(--card));
+  background: hsl(var(--clinical));
+  box-shadow: 0 0 0 6px hsl(var(--clinical) / 0.18);
+}
+
+.rescue-stage-dot-alert {
+  background: hsl(var(--emergency));
+  box-shadow: 0 0 0 8px hsl(var(--emergency) / 0.16);
+}
+
+.rescue-stage-dot-hospital {
+  background: hsl(var(--success));
+  box-shadow: 0 0 0 8px hsl(var(--success) / 0.16);
+}
+
+.rescue-stage-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: hsl(var(--muted-foreground));
+}
+
+.rescue-ambulance-runner {
+  position: absolute;
+  left: 8%;
+  top: 57%;
+  transform: translate(-50%, -50%);
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: hsl(var(--emergency));
+  color: hsl(var(--emergency-foreground));
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 20px hsl(var(--emergency) / 0.35);
+  animation: rescueRun 7s ease-in-out forwards;
+}
+
+@keyframes rescueRun {
+  0% {
+    left: 8%;
+    top: 57%;
+    filter: brightness(0.85);
+  }
+  38% {
+    left: 47%;
+    top: 57%;
+    filter: brightness(1);
+  }
+  54% {
+    left: 47%;
+    top: 57%;
+    filter: brightness(1.08);
+  }
+  92% {
+    left: 92%;
+    top: 57%;
+    filter: brightness(1);
+  }
+  100% {
+    left: 92%;
+    top: 57%;
+    filter: brightness(0.98);
+  }
+}
